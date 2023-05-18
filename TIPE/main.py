@@ -6,8 +6,6 @@ from matplotlib import pyplot as plt
 def lucas_kanade_method(video_path):
     # Read the video
     cap = cv2.VideoCapture(video_path)
-    liste_renvoi_X = []
-    liste_renvoi_Y = []
     # Parameters for ShiTomasi corner detection
     feature_params = dict(maxCorners=100, qualityLevel=0.3, minDistance=7, blockSize=7)
 
@@ -28,6 +26,8 @@ def lucas_kanade_method(video_path):
 
     # Create a mask image for drawing purposes
     mask = np.zeros_like(old_frame)
+    liste_renvoi_X = [[] for _ in range(len(color))]
+    liste_renvoi_Y = [[] for _ in range(len(color))]
 
     while True:
         # Read new frame
@@ -48,10 +48,10 @@ def lucas_kanade_method(video_path):
         for i, (new, old) in enumerate(zip(good_new, good_old)):
             a, b = new.ravel()
             c, d = old.ravel()
-            liste_renvoi_X.append(a)
-            liste_renvoi_X.append(c)
-            liste_renvoi_Y.append(b)
-            liste_renvoi_Y.append(d)
+            liste_renvoi_X[i].append(a)
+            liste_renvoi_X[i].append(c)
+            liste_renvoi_Y[i].append(b)
+            liste_renvoi_Y[i].append(d)
             mask = cv2.line(mask, (int(a), int(b)), (int(c), int(d)), color[i].tolist(), 2)
             frame = cv2.circle(frame, (int(a), int(b)), 5, color[i].tolist(), -1)
 
@@ -67,9 +67,9 @@ def lucas_kanade_method(video_path):
         p0 = good_new.reshape(-1, 1, 2)
     return (liste_renvoi_X,liste_renvoi_Y)
 
-l = lucas_kanade_method("/Users/simonlefranc/Desktop/TIPE/demo.avi")
-print(l)
-plt.scatter(l[0], l[1])
+l = lucas_kanade_method("/Users/simonlefranc/Desktop/TIPE/vid.mp4")
+for i in range(len(l[0])):
+    plt.scatter(l[0][i], l[1][i])
 plt.show()
 
 
