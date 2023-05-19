@@ -1,6 +1,7 @@
 import numpy as np
 import cv2
 
+## Code obtenu de : https://learnopencv.com/optical-flow-in-opencv/
 def lucas_kanade_method(video_path):
     # Read the video
     cap = cv2.VideoCapture(video_path)
